@@ -100,39 +100,33 @@ IP_minus_1 = np.array([40, 8, 48, 16, 56, 24, 64, 32,
 
 # permutation() -> funkcja permutująca wejściowy blok danych data_bytes_array; typ permutacji określony jest w
 # zmiennej permutation_type i jest to jeden z następujących napisów: "pc-1", "pc-2", "ip", "e", "p", "ip-1"
-# shape określa rozmiar tablicy bajtów, do której zapisywane będą bity po permutacji, end określa końcowy bit w bloku
-# danych po permutacji, permutation_table określa, jaka tablica zostanie użyta w procesie permutacji
+# shape określa rozmiar tablicy bajtów, do której zapisywane będą bity po permutacji, permutation_table określa, jaka
+# tablica zostanie użyta w procesie permutacji
 
 
 def permutation(data_bytes_array, permutation_type):
     if permutation_type == "pc-1":
         shape = np.uint(7)
-        end = np.uint8(56)
         permutation_table = PC_1
     elif permutation_type == "pc-2":
         shape = np.uint(6)
-        end = np.uint(48)
         permutation_table = PC_2
     elif permutation_type == "ip":
         shape = np.uint(8)
-        end = np.uint(64)
         permutation_table = IP
     elif permutation_type == "e":
         shape = np.uint(6)
-        end = np.uint(48)
         permutation_table = E
     elif permutation_type == "p":
         shape = np.uint(4)
-        end = np.uint(32)
         permutation_table = P
     elif permutation_type == "ip-1":
         shape = np.uint(8)
-        end = np.uint(64)
         permutation_table = IP_minus_1
     else:
         raise Exception("Niewłaściwy typ permutacji.")
     permuted_data = np.zeros((shape,), dtype="uint8")
-    for i in range(end):
+    for i in range(shape*np.uint(8)):
         permuted_data = set_bit(permuted_data, i, get_bit(data_bytes_array, permutation_table[i] - 1))
     return permuted_data
 
