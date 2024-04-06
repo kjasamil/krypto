@@ -130,6 +130,8 @@ class App:
         GLabel_114["text"] = "Zapisz klucze do pliku"
         GLabel_114.place(x=0,y=170,width=155,height=30)
 
+
+
         self.szyfrujButton=tk.Button(root)
         self.szyfrujButton["bg"] = "#f0f0f0"
         ft = tkFont.Font(family='Times',size=10)
@@ -137,7 +139,7 @@ class App:
         self.szyfrujButton["fg"] = "#000000"
         self.szyfrujButton["justify"] = "center"
         self.szyfrujButton["text"] = "Szyfruj"
-        self.szyfrujButton.place(x=350,y=360,width=70,height=25)
+        self.szyfrujButton.place(x=350,y=400,width=70,height=25)
         self.szyfrujButton["command"] = self.szyfrujButton_fun
 
         self.DeszyfrujButton=tk.Button(root)
@@ -147,7 +149,7 @@ class App:
         self.DeszyfrujButton["fg"] = "#000000"
         self.DeszyfrujButton["justify"] = "center"
         self.DeszyfrujButton["text"] = "Deszyfruj"
-        self.DeszyfrujButton.place(x=350,y=430,width=70,height=25)
+        self.DeszyfrujButton.place(x=350,y=450,width=70,height=25)
         self.DeszyfrujButton["command"] = self.DeszyfrujButton_fun
 
         GLabel_279=tk.Label(root)
