@@ -1,5 +1,5 @@
-# AUTORZY: Kamil Jaśkiewicz 247682, Nikodem Wojtczak
-# INFORMATYKA STOSOWANA SEMESTR IV
+# AUTORZY: Kamil Jaśkiewicz 247682, Nikodem Wojtczak 247823
+# ZESTAW IV
 
 import numpy as np
 import math as m
@@ -440,7 +440,10 @@ def decrypt(cipher_text, key_1, key_2, key_3):
     if len(cipher_text) % 16 != 0:
         raise Exception("Długość zakodowanego bloku danych musi być wielokrotnością 64 bitów.")
     output = np.array([], dtype="uint8")
-    cipher_bytes = hex_string_to_bytes_array(cipher_text)
+    try:
+        cipher_bytes = hex_string_to_bytes_array(cipher_text)
+    except ValueError:
+        raise Exception("Szyfr musi być w systemie szesnastkowym.")
     check_keys_length(key_1, key_2, key_3)
     try:
         key_1_bytes = hex_string_to_bytes_array(key_1)
@@ -474,8 +477,3 @@ def generate_keys():
 
 # w programie nie sprawdzamy wyjątków dla funkcji, dla których dane wejściowe są podawane wewnątrz programu
 # (zakładamy ich poprawność), jedynie dla funkcji, które będą wywoływane dla danych pobieranych z GUI
-
-# PONIŻSZY KOD SPRAWDZA CZY DZIAŁA DES (DO USUNIĘCIA)
-# message = hex_string_to_bytes_array("0123456789ABCDEF")
-# key = hex_string_to_bytes_array("133457799BBCDFF1")
-# print(bytes_array_to_hex_string(des(key, message, False)))

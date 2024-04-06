@@ -1,6 +1,8 @@
 import algorithm as des
 import tkinter as tk
 import tkinter.font as tkFont
+import os.path
+
 
 class App:
     def __init__(self, root):
@@ -16,15 +18,15 @@ class App:
         root.resizable(width=False, height=False)
 
         GLabel_816=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_816["font"] = ft
         GLabel_816["fg"] = "#333333"
         GLabel_816["justify"] = "center"
         GLabel_816["text"] = "Wartość klucza 1"
-        GLabel_816.place(x=0,y=10,width=113,height=32)
+        GLabel_816.place(x=0,y=20,width=113,height=30)
 
         GLabel_804=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_804["font"] = ft
         GLabel_804["fg"] = "#333333"
         GLabel_804["justify"] = "center"
@@ -32,7 +34,7 @@ class App:
         GLabel_804.place(x=270,y=20,width=119,height=30)
 
         GLabel_184=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_184["font"] = ft
         GLabel_184["fg"] = "#333333"
         GLabel_184["justify"] = "center"
@@ -41,7 +43,7 @@ class App:
 
         self.Klucz1Entry=tk.Entry(root)
         self.Klucz1Entry["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.Klucz1Entry["font"] = ft
         self.Klucz1Entry["fg"] = "#333333"
         self.Klucz1Entry["justify"] = "center"
@@ -50,7 +52,7 @@ class App:
 
         self.Klucz2Entry=tk.Entry(root)
         self.Klucz2Entry["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.Klucz2Entry["font"] = ft
         self.Klucz2Entry["fg"] = "#333333"
         self.Klucz2Entry["justify"] = "center"
@@ -59,7 +61,7 @@ class App:
 
         self.Klucz3Entry=tk.Entry(root)
         self.Klucz3Entry["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.Klucz3Entry["font"] = ft
         self.Klucz3Entry["fg"] = "#333333"
         self.Klucz3Entry["justify"] = "center"
@@ -68,7 +70,7 @@ class App:
 
         self.GenerukKluczButton=tk.Button(root)
         self.GenerukKluczButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.GenerukKluczButton["font"] = ft
         self.GenerukKluczButton["fg"] = "#000000"
         self.GenerukKluczButton["justify"] = "center"
@@ -78,7 +80,7 @@ class App:
 
         self.ZapiszKluczButton=tk.Button(root)
         self.ZapiszKluczButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.ZapiszKluczButton["font"] = ft
         self.ZapiszKluczButton["fg"] = "#000000"
         self.ZapiszKluczButton["justify"] = "center"
@@ -88,7 +90,7 @@ class App:
 
         self.WczytajKluczButton=tk.Button(root)
         self.WczytajKluczButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.WczytajKluczButton["font"] = ft
         self.WczytajKluczButton["fg"] = "#000000"
         self.WczytajKluczButton["justify"] = "center"
@@ -98,7 +100,7 @@ class App:
 
         self.SciezkaWczytanieKlucza=tk.Entry(root)
         self.SciezkaWczytanieKlucza["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SciezkaWczytanieKlucza["font"] = ft
         self.SciezkaWczytanieKlucza["fg"] = "#333333"
         self.SciezkaWczytanieKlucza["justify"] = "center"
@@ -107,7 +109,7 @@ class App:
 
         self.SciezkaZapisuKlucza=tk.Entry(root)
         self.SciezkaZapisuKlucza["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SciezkaZapisuKlucza["font"] = ft
         self.SciezkaZapisuKlucza["fg"] = "#333333"
         self.SciezkaZapisuKlucza["justify"] = "center"
@@ -115,7 +117,7 @@ class App:
         self.SciezkaZapisuKlucza.place(x=170,y=180,width=221,height=30)
 
         GLabel_551=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_551["font"] = ft
         GLabel_551["fg"] = "#333333"
         GLabel_551["justify"] = "center"
@@ -123,7 +125,7 @@ class App:
         GLabel_551.place(x=0,y=130,width=166,height=30)
 
         GLabel_114=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_114["font"] = ft
         GLabel_114["fg"] = "#333333"
         GLabel_114["justify"] = "center"
@@ -132,7 +134,7 @@ class App:
 
         self.szyfrujButton=tk.Button(root)
         self.szyfrujButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.szyfrujButton["font"] = ft
         self.szyfrujButton["fg"] = "#000000"
         self.szyfrujButton["justify"] = "center"
@@ -142,7 +144,7 @@ class App:
 
         self.DeszyfrujButton=tk.Button(root)
         self.DeszyfrujButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.DeszyfrujButton["font"] = ft
         self.DeszyfrujButton["fg"] = "#000000"
         self.DeszyfrujButton["justify"] = "center"
@@ -151,7 +153,7 @@ class App:
         self.DeszyfrujButton["command"] = self.DeszyfrujButton_fun
 
         GLabel_279=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_279["font"] = ft
         GLabel_279["fg"] = "#333333"
         GLabel_279["justify"] = "center"
@@ -160,7 +162,7 @@ class App:
 
         self.SciezkaPlikuTekstuJawnego=tk.Entry(root)
         self.SciezkaPlikuTekstuJawnego["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SciezkaPlikuTekstuJawnego["font"] = ft
         self.SciezkaPlikuTekstuJawnego["fg"] = "#333333"
         self.SciezkaPlikuTekstuJawnego["justify"] = "center"
@@ -168,7 +170,7 @@ class App:
         self.SciezkaPlikuTekstuJawnego.place(x=10,y=270,width=214,height=30)
 
         GLabel_288=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_288["font"] = ft
         GLabel_288["fg"] = "#333333"
         GLabel_288["justify"] = "center"
@@ -177,7 +179,7 @@ class App:
 
         self.SciezkaPlikuSzyfrogramu=tk.Entry(root)
         self.SciezkaPlikuSzyfrogramu["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SciezkaPlikuSzyfrogramu["font"] = ft
         self.SciezkaPlikuSzyfrogramu["fg"] = "#333333"
         self.SciezkaPlikuSzyfrogramu["justify"] = "center"
@@ -186,7 +188,7 @@ class App:
 
         self.ZapiszTekstJawnyButton=tk.Button(root)
         self.ZapiszTekstJawnyButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.ZapiszTekstJawnyButton["font"] = ft
         self.ZapiszTekstJawnyButton["fg"] = "#000000"
         self.ZapiszTekstJawnyButton["justify"] = "center"
@@ -196,7 +198,7 @@ class App:
 
         self.ZapiszSzyfrogramButton=tk.Button(root)
         self.ZapiszSzyfrogramButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.ZapiszSzyfrogramButton["font"] = ft
         self.ZapiszSzyfrogramButton["fg"] = "#000000"
         self.ZapiszSzyfrogramButton["justify"] = "center"
@@ -206,7 +208,7 @@ class App:
 
         self.SciezkaPlikuTekstuJawnegoDoZapisu=tk.Entry(root)
         self.SciezkaPlikuTekstuJawnegoDoZapisu["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SciezkaPlikuTekstuJawnegoDoZapisu["font"] = ft
         self.SciezkaPlikuTekstuJawnegoDoZapisu["fg"] = "#333333"
         self.SciezkaPlikuTekstuJawnegoDoZapisu["justify"] = "center"
@@ -215,7 +217,7 @@ class App:
 
         self.SceizkaPlikuSzyfrogramuDOZapisu=tk.Entry(root)
         self.SceizkaPlikuSzyfrogramuDOZapisu["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.SceizkaPlikuSzyfrogramuDOZapisu["font"] = ft
         self.SceizkaPlikuSzyfrogramuDOZapisu["fg"] = "#333333"
         self.SceizkaPlikuSzyfrogramuDOZapisu["justify"] = "center"
@@ -223,7 +225,7 @@ class App:
         self.SceizkaPlikuSzyfrogramuDOZapisu.place(x=400,y=550,width=205,height=30)
 
         GLabel_932=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_932["font"] = ft
         GLabel_932["fg"] = "#333333"
         GLabel_932["justify"] = "center"
@@ -231,7 +233,7 @@ class App:
         GLabel_932.place(x=0,y=520,width=170,height=30)
 
         GLabel_972=tk.Label(root)
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         GLabel_972["font"] = ft
         GLabel_972["fg"] = "#333333"
         GLabel_972["justify"] = "center"
@@ -240,7 +242,7 @@ class App:
 
         self.WczytajTekstjawnyButton=tk.Button(root)
         self.WczytajTekstjawnyButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.WczytajTekstjawnyButton["font"] = ft
         self.WczytajTekstjawnyButton["fg"] = "#000000"
         self.WczytajTekstjawnyButton["justify"] = "center"
@@ -250,7 +252,7 @@ class App:
 
         self.WczytajSzyfrogramButton=tk.Button(root)
         self.WczytajSzyfrogramButton["bg"] = "#f0f0f0"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.WczytajSzyfrogramButton["font"] = ft
         self.WczytajSzyfrogramButton["fg"] = "#000000"
         self.WczytajSzyfrogramButton["justify"] = "center"
@@ -260,7 +262,7 @@ class App:
 
         self.TekstJawny=tk.Text(root)
         self.TekstJawny["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.TekstJawny["font"] = ft
         self.TekstJawny["fg"] = "#333333"
         self.TekstJawny["relief"] = "sunken"
@@ -268,7 +270,7 @@ class App:
 
         self.Szyfrogram=tk.Text(root)
         self.Szyfrogram["borderwidth"] = "1px"
-        ft = tkFont.Font(family='Times',size=10)
+        ft = tkFont.Font(family='Helvetica',size=9)
         self.Szyfrogram["font"] = ft
         self.Szyfrogram["fg"] = "#333333"
         self.Szyfrogram["relief"] = "flat"
@@ -285,7 +287,6 @@ class App:
         self.Klucz2Entry.insert(tk.END, klucze[1])
         self.Klucz3Entry.insert(tk.END, klucze[2])
 
-
     def ZapiszKluczButton_fun(self):
         sciezka =  self.SciezkaZapisuKlucza.get()
         klucz1 = self.Klucz1Entry.get()
@@ -295,24 +296,21 @@ class App:
         with open(sciezka, 'w') as file:
             file.writelines(klucze)
 
-
-
-
     def WczytajKluczButton_fun(self):
         sciezka =  self.SciezkaWczytanieKlucza.get()
 
-        with open(sciezka, 'r') as file:
-            lines = file.readlines()
+        if not os.path.exists(sciezka):
+            self.display_error("Nie można odnaleźć wskazanego pliku.")
+        else:
+            with open(sciezka, 'r') as file:
+                lines = file.readlines()
+            self.Klucz1Entry.delete(0, tk.END)
+            self.Klucz2Entry.delete(0, tk.END)
+            self.Klucz3Entry.delete(0, tk.END)
 
-        self.Klucz1Entry.delete(0, tk.END)
-        self.Klucz2Entry.delete(0, tk.END)
-        self.Klucz3Entry.delete(0, tk.END)
-
-        self.Klucz1Entry.insert(tk.END, lines[0][:-1])
-        self.Klucz2Entry.insert(tk.END, lines[1][:-1])
-        self.Klucz3Entry.insert(tk.END, lines[2])
-
-
+            self.Klucz1Entry.insert(tk.END, lines[0][:-1])
+            self.Klucz2Entry.insert(tk.END, lines[1][:-1])
+            self.Klucz3Entry.insert(tk.END, lines[2])
 
     def szyfrujButton_fun(self):
         try:
@@ -335,9 +333,10 @@ class App:
             klucz3 = self.Klucz3Entry.get()
             tekst = self.Szyfrogram.get("1.0", tk.END)
             tekst = tekst[:-1]  # Remove the last newline character
-            tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)  # Assuming des.decrypt might raise an exception
-            self.TekstJawny.delete("1.0", tk.END)
-            self.TekstJawny.insert(tk.END, tekst)
+            if len(tekst) > 0:
+                tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)  # Assuming des.decrypt might raise an exception
+                self.TekstJawny.delete("1.0", tk.END)
+                self.TekstJawny.insert(tk.END, tekst)
         except Exception as e:
             # If an exception occurred, display it in a new window
             self.display_error(str(e))
@@ -358,25 +357,38 @@ class App:
 
     def WczytajTekstjawnyButton_Fun(self):
         sciezka =  self.SciezkaPlikuTekstuJawnego.get()
-        with open(sciezka, 'r') as file:
-            tekst =  file.read()
-        self.TekstJawny.delete("1.0", tk.END)
-        self.TekstJawny.insert( tk.END, tekst)
+        if not os.path.exists(sciezka):
+            self.display_error("Nie można odnaleźć wskazanego pliku.")
+        else:
+            with open(sciezka, 'r') as file:
+                tekst =  file.read()
+            self.TekstJawny.delete("1.0", tk.END)
+            self.TekstJawny.insert( tk.END, tekst)
 
     def WczytajSzyfrogramButton_Fun(self):
         sciezka =  self.SciezkaPlikuSzyfrogramu.get()
-        with open(sciezka, 'r') as file:
-            tekst =  file.read()
-        self.Szyfrogram.delete("1.0", tk.END)
-        self.Szyfrogram.insert( tk.END, tekst)
+        if not os.path.exists(sciezka):
+            self.display_error("Nie można odnaleźć wskazanego pliku.")
+        else:
+            with open(sciezka, 'r') as file:
+                tekst =  file.read()
+            self.Szyfrogram.delete("1.0", tk.END)
+            self.Szyfrogram.insert( tk.END, tekst)
 
     def display_error(self, error_message):
         # This function creates a new window to display the error message
         error_window = tk.Toplevel()  # Create a new top-level window
-        error_window.title("Error")
-        tk.Label(error_window, text="An error occurred:").pack(pady=(10, 0))
+        error_window.title("Błąd")
+        tk.Label(error_window, text="Napotkano błąd:").pack(pady=(10, 0))
         tk.Label(error_window, text=error_message).pack(pady=(0, 10))
         tk.Button(error_window, text="OK", command=error_window.destroy).pack(pady=(0, 10))
+        error_window_width = 420  # Domyślna szerokość okna
+        error_window_height = 100  # Domyślna wysokość okna
+        screen_width = error_window.winfo_screenwidth()
+        screen_height = error_window.winfo_screenheight()
+        x = (screen_width - error_window_width) // 2
+        y = (screen_height - error_window_height) // 2
+        error_window.geometry(f"{error_window_width}x{error_window_height}+{x}+{y}")
         error_window.focus()
 
 root = tk.Tk()
