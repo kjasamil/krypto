@@ -5,7 +5,7 @@ import tkinter.font as tkFont
 class App:
     def __init__(self, root):
         #setting title
-        root.title("undefined")
+        root.title("DESX")
         #setting window size
         width=763
         height=625
@@ -127,7 +127,7 @@ class App:
         GLabel_114["font"] = ft
         GLabel_114["fg"] = "#333333"
         GLabel_114["justify"] = "center"
-        GLabel_114["text"] = "Zapisz klucze z pliku"
+        GLabel_114["text"] = "Zapisz klucze do pliku"
         GLabel_114.place(x=0,y=170,width=155,height=30)
 
         self.szyfrujButton=tk.Button(root)
