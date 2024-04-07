@@ -6,19 +6,17 @@ import os.path
 
 class App:
     def __init__(self, root):
-        #setting title
         root.title("DESX")
-        #setting window size
-        width=763
-        height=625
+        width = 763
+        height = 625
         screenwidth = root.winfo_screenwidth()
         screenheight = root.winfo_screenheight()
         alignstr = '%dx%d+%d+%d' % (width, height, (screenwidth - width) / 2, (screenheight - height) / 2)
         root.geometry(alignstr)
         root.resizable(width=False, height=False)
 
-        GLabel_816=tk.Label(root)
-        ft = tkFont.Font(family='Helvetica',size=9)
+        GLabel_816 = tk.Label(root)
+        ft = tkFont.Font(family='Helvetica' ,size=9)
         GLabel_816["font"] = ft
         GLabel_816["fg"] = "#333333"
         GLabel_816["justify"] = "center"
@@ -293,7 +291,7 @@ class App:
         klucz2 = self.Klucz2Entry.get()
         klucz3 = self.Klucz3Entry.get()
         klucze = [klucz1+"\n",klucz2+"\n",klucz3]
-        with open(sciezka, 'w') as file:
+        with open(sciezka, 'w', encoding="utf-8") as file:
             file.writelines(klucze)
 
     def WczytajKluczButton_fun(self):
@@ -302,7 +300,7 @@ class App:
         if not os.path.exists(sciezka):
             self.display_error("Nie można odnaleźć wskazanego pliku.")
         else:
-            with open(sciezka, 'r') as file:
+            with open(sciezka, 'r', encoding="utf-8") as file:
                 lines = file.readlines()
             self.Klucz1Entry.delete(0, tk.END)
             self.Klucz2Entry.delete(0, tk.END)
@@ -323,7 +321,6 @@ class App:
             self.Szyfrogram.delete("1.0", tk.END)
             self.Szyfrogram.insert(tk.END, tekst)
         except Exception as e:
-            # If an exception occurred, display it in a new window
             self.display_error(str(e))
 
     def DeszyfrujButton_fun(self):
@@ -332,27 +329,26 @@ class App:
             klucz2 = self.Klucz2Entry.get()
             klucz3 = self.Klucz3Entry.get()
             tekst = self.Szyfrogram.get("1.0", tk.END)
-            tekst = tekst[:-1]  # Remove the last newline character
+            tekst = tekst[:-1]  # usuń znak nowej linii
             if len(tekst) > 0:
-                tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)  # Assuming des.decrypt might raise an exception
+                tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)
                 self.TekstJawny.delete("1.0", tk.END)
                 self.TekstJawny.insert(tk.END, tekst)
         except Exception as e:
-            # If an exception occurred, display it in a new window
             self.display_error(str(e))
 
     def ZapiszTekstJawnyButton_FUn(self):
         sciezka =  self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
         tekst = self.TekstJawny.get("1.0", tk.END)
         tekst = tekst[:-1]
-        with open(sciezka, 'w') as file:
+        with open(sciezka, 'w', encoding="utf-8") as file:
             file.write(tekst)
 
     def ZapiszSzyfrogramButton_fun(self):
         sciezka =  self.SceizkaPlikuSzyfrogramuDOZapisu.get()
         tekst = self.Szyfrogram.get("1.0", tk.END)
         tekst = tekst[:-1]
-        with open(sciezka, 'w') as file:
+        with open(sciezka, 'w', encoding="utf-8") as file:
             file.write(tekst)
 
     def WczytajTekstjawnyButton_Fun(self):
@@ -360,7 +356,7 @@ class App:
         if not os.path.exists(sciezka):
             self.display_error("Nie można odnaleźć wskazanego pliku.")
         else:
-            with open(sciezka, 'r') as file:
+            with open(sciezka, 'r', encoding="utf-8") as file:
                 tekst =  file.read()
             self.TekstJawny.delete("1.0", tk.END)
             self.TekstJawny.insert( tk.END, tekst)
@@ -370,14 +366,13 @@ class App:
         if not os.path.exists(sciezka):
             self.display_error("Nie można odnaleźć wskazanego pliku.")
         else:
-            with open(sciezka, 'r') as file:
-                tekst =  file.read()
+            with open(sciezka, 'r', encoding="utf-8") as file:
+                tekst = file.read()
             self.Szyfrogram.delete("1.0", tk.END)
             self.Szyfrogram.insert( tk.END, tekst)
 
     def display_error(self, error_message):
-        # This function creates a new window to display the error message
-        error_window = tk.Toplevel()  # Create a new top-level window
+        error_window = tk.Toplevel()
         error_window.title("Błąd")
         tk.Label(error_window, text="Napotkano błąd:").pack(pady=(10, 0))
         tk.Label(error_window, text=error_message).pack(pady=(0, 10))
@@ -390,6 +385,7 @@ class App:
         y = (screen_height - error_window_height) // 2
         error_window.geometry(f"{error_window_width}x{error_window_height}+{x}+{y}")
         error_window.focus()
+
 
 root = tk.Tk()
 app = App(root)
