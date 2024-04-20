@@ -408,9 +408,13 @@ def check_keys_length(first, second, third):
 # otrzymując zaszyfrowany blok.
 
 
-def encrypt(plain_text, key_1, key_2, key_3):
+def encrypt(plain_text, key_1, key_2, key_3, isText):
     output = np.array([], dtype="uint8")
-    text_bytes = string_to_bytes_array(plain_text)
+    if isText:
+        text_bytes = string_to_bytes_array(plain_text)
+    else:
+        text_bytes = plain_text
+    print(text_bytes)
     check_keys_length(key_1, key_2, key_3)
     try:
         key_1_bytes = hex_string_to_bytes_array(key_1)
@@ -427,6 +431,11 @@ def encrypt(plain_text, key_1, key_2, key_3):
         output = np.append(output, block)
     output = bytes_array_to_hex_string(output)
     return output
+    # if isText:
+    #     output = bytes_array_to_hex_string(output)
+    #     return output
+    # else:
+    #     return output
 
 
 # decrypt() to funkcja podobna do funkcji encrypt() z tą różnicą że stosujemy klucze w odwrotnej kolejności, łącznie
@@ -460,7 +469,7 @@ def decrypt(cipher_text, key_1, key_2, key_3):
         output = np.append(output, block)
     while output[-1] == np.uint(0):
         output = output[:-1]
-    output = bytes_array_to_string(output)
+    # output = bytes_array_to_string(output)
     return output
 
 

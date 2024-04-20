@@ -130,6 +130,31 @@ class App:
         GLabel_114["text"] = "Zapisz klucze do pliku"
         GLabel_114.place(x=0,y=170,width=155,height=30)
 
+        self.v = tk.IntVar()
+
+        self.plikRadio=tk.Radiobutton(root)
+        self.plikRadio["bg"] = "#f0f0f0"
+        ft = tkFont.Font(family='Times',size=10)
+        self.plikRadio["font"] = ft
+        self.plikRadio["fg"] = "#000000"
+        self.plikRadio["justify"] = "center"
+        self.plikRadio["text"] = "Plik"
+        self.plikRadio.place(x=350,y=320,width=70,height=25)
+        # self.plikRadio["command"] = self.szyfrujButton_fun
+        self.plikRadio["variable"] = self.v
+        self.plikRadio["value"] = 0
+
+        self.tekstRadio=tk.Radiobutton(root)
+        self.tekstRadio["bg"] = "#f0f0f0"
+        ft = tkFont.Font(family='Times',size=10)
+        self.tekstRadio["font"] = ft
+        self.tekstRadio["fg"] = "#000000"
+        self.tekstRadio["justify"] = "center"
+        self.tekstRadio["text"] = "Tekst"
+        self.tekstRadio.place(x=350,y=350,width=70,height=25)
+        # self.tekstRadio["command"] = self.szyfrujButton_fun
+        self.tekstRadio["variable"] = self.v
+        self.tekstRadio["value"] = 1
 
 
         self.szyfrujButton=tk.Button(root)
@@ -313,31 +338,63 @@ class App:
             self.Klucz3Entry.insert(tk.END, lines[2])
 
     def szyfrujButton_fun(self):
-        try:
+        if self.v.get(): #Text
+            try:
+                klucz1 = self.Klucz1Entry.get()
+                klucz2 = self.Klucz2Entry.get()
+                klucz3 = self.Klucz3Entry.get()
+                tekst = self.TekstJawny.get("1.0", tk.END)
+                tekst = tekst[:-1]
+                tekst = des.encrypt(tekst, klucz1, klucz2, klucz3, self.v.get())
+                self.Szyfrogram.delete("1.0", tk.END)
+                self.Szyfrogram.insert(tk.END, tekst)
+            except Exception as e:
+                self.display_error(str(e))
+        else:
+            # try:
             klucz1 = self.Klucz1Entry.get()
             klucz2 = self.Klucz2Entry.get()
             klucz3 = self.Klucz3Entry.get()
-            tekst = self.TekstJawny.get("1.0", tk.END)
-            tekst = tekst[:-1]
-            tekst = des.encrypt(tekst, klucz1, klucz2, klucz3)
-            self.Szyfrogram.delete("1.0", tk.END)
-            self.Szyfrogram.insert(tk.END, tekst)
-        except Exception as e:
-            self.display_error(str(e))
+            sciezkaDoWczytania = self.SciezkaPlikuTekstuJawnego.get()
+            sciezkaDoZapisu = self.SceizkaPlikuSzyfrogramuDOZapisu.get()
+            with open(sciezkaDoWczytania, 'rb') as file:
+                file_content = file.read()
+            encrypted = des.encrypt(file_content, klucz1, klucz2, klucz3, self.v.get())
+            with open(sciezkaDoZapisu, 'w') as file:
+                file.write(encrypted)
+            # except Exception as e:
+            #     self.display_error(str(e))
 
     def DeszyfrujButton_fun(self):
-        try:
+        if self.v.get(): #Text
+            try:
+                print("text")
+                klucz1 = self.Klucz1Entry.get()
+                klucz2 = self.Klucz2Entry.get()
+                klucz3 = self.Klucz3Entry.get()
+                tekst = self.Szyfrogram.get("1.0", tk.END)
+                tekst = tekst[:-1]  # usuń znak nowej linii
+                if len(tekst) > 0:
+                    tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)
+                    self.TekstJawny.delete("1.0", tk.END)
+                    self.TekstJawny.insert(tk.END, tekst)
+            except Exception as e:
+                self.display_error(str(e))
+        else:
+            # try:
+            print("plik")
             klucz1 = self.Klucz1Entry.get()
             klucz2 = self.Klucz2Entry.get()
             klucz3 = self.Klucz3Entry.get()
-            tekst = self.Szyfrogram.get("1.0", tk.END)
-            tekst = tekst[:-1]  # usuń znak nowej linii
-            if len(tekst) > 0:
-                tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)
-                self.TekstJawny.delete("1.0", tk.END)
-                self.TekstJawny.insert(tk.END, tekst)
-        except Exception as e:
-            self.display_error(str(e))
+            sciezkaDoWczytania = self.SciezkaPlikuSzyfrogramu.get()
+            sciezkaDoZapisu = self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
+            with open(sciezkaDoWczytania, 'r') as file:
+                file_content = file.read()
+            encrypted = des.decrypt(file_content, klucz1, klucz2, klucz3)
+            with open(sciezkaDoZapisu, 'wb') as file:
+                file.write(encrypted)
+            # except Exception as e:
+            #     self.display_error(str(e))
 
     def ZapiszTekstJawnyButton_FUn(self):
         sciezka =  self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
