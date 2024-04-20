@@ -351,19 +351,19 @@ class App:
             except Exception as e:
                 self.display_error(str(e))
         else:
-            # try:
-            klucz1 = self.Klucz1Entry.get()
-            klucz2 = self.Klucz2Entry.get()
-            klucz3 = self.Klucz3Entry.get()
-            sciezkaDoWczytania = self.SciezkaPlikuTekstuJawnego.get()
-            sciezkaDoZapisu = self.SceizkaPlikuSzyfrogramuDOZapisu.get()
-            with open(sciezkaDoWczytania, 'rb') as file:
-                file_content = file.read()
-            encrypted = des.encrypt(file_content, klucz1, klucz2, klucz3, self.v.get())
-            with open(sciezkaDoZapisu, 'w') as file:
-                file.write(encrypted)
-            # except Exception as e:
-            #     self.display_error(str(e))
+            try:
+                klucz1 = self.Klucz1Entry.get()
+                klucz2 = self.Klucz2Entry.get()
+                klucz3 = self.Klucz3Entry.get()
+                sciezkaDoWczytania = self.SciezkaPlikuTekstuJawnego.get()
+                sciezkaDoZapisu = self.SceizkaPlikuSzyfrogramuDOZapisu.get()
+                with open(sciezkaDoWczytania, 'rb') as file:
+                    file_content = file.read()
+                encrypted = des.encrypt(file_content, klucz1, klucz2, klucz3, self.v.get())
+                with open(sciezkaDoZapisu, 'w') as file:
+                    file.write(encrypted)
+            except Exception as e:
+                self.display_error(str(e))
 
     def DeszyfrujButton_fun(self):
         if self.v.get(): #Text
@@ -381,20 +381,19 @@ class App:
             except Exception as e:
                 self.display_error(str(e))
         else:
-            # try:
-            print("plik")
-            klucz1 = self.Klucz1Entry.get()
-            klucz2 = self.Klucz2Entry.get()
-            klucz3 = self.Klucz3Entry.get()
-            sciezkaDoWczytania = self.SciezkaPlikuSzyfrogramu.get()
-            sciezkaDoZapisu = self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
-            with open(sciezkaDoWczytania, 'r') as file:
-                file_content = file.read()
-            encrypted = des.decrypt(file_content, klucz1, klucz2, klucz3)
-            with open(sciezkaDoZapisu, 'wb') as file:
-                file.write(encrypted)
-            # except Exception as e:
-            #     self.display_error(str(e))
+            try:
+                klucz1 = self.Klucz1Entry.get()
+                klucz2 = self.Klucz2Entry.get()
+                klucz3 = self.Klucz3Entry.get()
+                sciezkaDoWczytania = self.SciezkaPlikuSzyfrogramu.get()
+                sciezkaDoZapisu = self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
+                with open(sciezkaDoWczytania, 'r') as file:
+                    file_content = file.read()
+                encrypted = des.decrypt(file_content, klucz1, klucz2, klucz3)
+                with open(sciezkaDoZapisu, 'wb') as file:
+                    file.write(encrypted)
+            except Exception as e:
+                self.display_error(str(e))
 
     def ZapiszTekstJawnyButton_FUn(self):
         sciezka =  self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
