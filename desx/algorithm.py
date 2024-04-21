@@ -413,8 +413,7 @@ def encrypt(plain_text, key_1, key_2, key_3, isText):
     if isText:
         text_bytes = string_to_bytes_array(plain_text)
     else:
-        text_bytes = plain_text
-    print(text_bytes)
+        text_bytes = np.frombuffer(plain_text, dtype=np.uint8)
     check_keys_length(key_1, key_2, key_3)
     try:
         key_1_bytes = hex_string_to_bytes_array(key_1)
