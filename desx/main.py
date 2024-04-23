@@ -2,7 +2,7 @@ import algorithm as des
 import tkinter as tk
 import tkinter.font as tkFont
 import os.path
-
+import numpy as np
 
 class App:
     def __init__(self, root):
@@ -346,6 +346,8 @@ class App:
                 tekst = self.TekstJawny.get("1.0", tk.END)
                 tekst = tekst[:-1]
                 tekst = des.encrypt(tekst, klucz1, klucz2, klucz3, self.v.get())
+                tekst = np.frombuffer(tekst)
+                tekst = des.bytes_array_to_hex_string(tekst)
                 self.Szyfrogram.delete("1.0", tk.END)
                 self.Szyfrogram.insert(tk.END, tekst)
             except Exception as e:
@@ -360,7 +362,7 @@ class App:
                 with open(sciezkaDoWczytania, 'rb') as file:
                     file_content = file.read()
                 encrypted = des.encrypt(file_content, klucz1, klucz2, klucz3, self.v.get())
-                with open(sciezkaDoZapisu, 'w') as file:
+                with open(sciezkaDoZapisu, 'wb') as file:
                     file.write(encrypted)
             except Exception as e:
                 self.display_error(str(e))
@@ -375,7 +377,7 @@ class App:
                 tekst = self.Szyfrogram.get("1.0", tk.END)
                 tekst = tekst[:-1]  # usuń znak nowej linii
                 if len(tekst) > 0:
-                    tekst = des.decrypt(tekst, klucz1, klucz2, klucz3)
+                    tekst = des.decrypt(tekst, klucz1, klucz2, klucz3, self.v.get())
                     self.TekstJawny.delete("1.0", tk.END)
                     self.TekstJawny.insert(tk.END, tekst)
             except Exception as e:
@@ -387,9 +389,9 @@ class App:
                 klucz3 = self.Klucz3Entry.get()
                 sciezkaDoWczytania = self.SciezkaPlikuSzyfrogramu.get()
                 sciezkaDoZapisu = self.SciezkaPlikuTekstuJawnegoDoZapisu.get()
-                with open(sciezkaDoWczytania, 'r') as file:
+                with open(sciezkaDoWczytania, 'rb') as file:
                     file_content = file.read()
-                encrypted = des.decrypt(file_content, klucz1, klucz2, klucz3)
+                encrypted = des.decrypt(file_content, klucz1, klucz2, klucz3, self.v.get())
                 with open(sciezkaDoZapisu, 'wb') as file:
                     file.write(encrypted)
             except Exception as e:

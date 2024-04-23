@@ -428,7 +428,7 @@ def encrypt(plain_text, key_1, key_2, key_3, isText):
         block = des(key_2_bytes, block, False)
         block = xor(block, key_3_bytes)
         output = np.append(output, block)
-    output = bytes_array_to_hex_string(output)
+    output = output.tobytes()
     return output
     # if isText:
     #     output = bytes_array_to_hex_string(output)
@@ -444,14 +444,15 @@ def encrypt(plain_text, key_1, key_2, key_3, isText):
 # otrzymaną tablicę bajtów konwertujemy na napis
 
 
-def decrypt(cipher_text, key_1, key_2, key_3):
-    if len(cipher_text) % 16 != 0:
-        raise Exception("Długość zakodowanego bloku danych musi być wielokrotnością 64 bitów.")
+def decrypt(cipher_text, key_1, key_2, key_3, isText):
+    if isText:
+        try:
+            cipher_bytes = hex_string_to_bytes_array(cipher_text)
+        except ValueError:
+            raise Exception("Szyfr musi być w systemie szesnastkowym.")
+    else:
+        cipher_bytes = np.frombuffer(cipher_text, dtype=np.uint8)
     output = np.array([], dtype="uint8")
-    try:
-        cipher_bytes = hex_string_to_bytes_array(cipher_text)
-    except ValueError:
-        raise Exception("Szyfr musi być w systemie szesnastkowym.")
     check_keys_length(key_1, key_2, key_3)
     try:
         key_1_bytes = hex_string_to_bytes_array(key_1)
