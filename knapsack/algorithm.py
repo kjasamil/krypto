@@ -8,6 +8,14 @@ def get_bit(byte, index):
     return (byte >> (8 - (index + 1)) & 1) == 1
 
 
+def set_bit(byte, bit, index):
+    if bit:
+        result = byte | (128 >> index)
+    else:
+        result = byte & ~(128 >> index)
+    return result
+
+
 class Knapsack:
     def __init__(self):
         self.a = []
@@ -60,15 +68,37 @@ class Knapsack:
             for j in range(8):
                 bit = get_bit(byte, j)
                 if bit:
-                    partial_sum += self.a_prim[7-j]
+                    partial_sum += self.a_prim[j]
             cipher.append(partial_sum)
         cipher = ",".join([hex(x)[2:] for x in cipher])
+        cipher = cipher.encode("iso-8859-2")
         return cipher
+
+    def decrypt(self, cipher_text, is_text):
+        plain_text = bytearray()
+        cipher_text = cipher_text.decode("iso-8859-2")
+        cipher_text = cipher_text.split(",")
+        cipher_text = [int(hex_str, 16) for hex_str in cipher_text]
+        for i in range(len(cipher_text)):
+            plain_text.append(0)
+            cipher_text[i] *= self.inv_w
+            cipher_text[i] %= self.m
+            for j in range(8):
+                if cipher_text[i] >= self.a[7-j]:
+                    plain_text[i] = set_bit(plain_text[i], True, 7-j)
+                    cipher_text[i] -= self.a[7-j]
+        if is_text:
+            plain_text = plain_text.decode("iso-8859-2")
+        return plain_text
+
+# TESTING PURPOSES
 
 
 knap = Knapsack()
-print(knap.a_string)
-print(knap.a_prim_string)
-print(knap.m_string)
-print(knap.w_string)
-print(knap.encrypt("ąę", True))
+print("klucz prywatny", knap.a_string)
+print("Klucz jawny", knap.a_prim_string)
+print("Wartość m", knap.m_string)
+print("Wartość w", knap.w_string)
+encrypted = knap.encrypt("Gżegżółka", True)
+print("Kryptogram", encrypted)
+print("Odszyfrowane:", knap.decrypt(encrypted, True))
