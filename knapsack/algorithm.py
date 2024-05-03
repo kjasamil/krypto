@@ -4,6 +4,10 @@ import math as m
 import random as ran
 
 
+def get_bit(byte, index):
+    return (byte >> (8 - (index + 1)) & 1) == 1
+
+
 class Knapsack:
     def __init__(self):
         self.a = []
@@ -46,9 +50,25 @@ class Knapsack:
         self.m_string = hex(self.m)[2:]
         self.w_string = hex(self.w)[2:]
 
+    def encrypt(self, plain_text, is_text):
+        if is_text:
+            plain_text = plain_text.encode("iso-8859-2")
+        cipher = []
+        for i in range(len(plain_text)):
+            partial_sum = 0
+            byte = plain_text[i]
+            for j in range(8):
+                bit = get_bit(byte, j)
+                if bit:
+                    partial_sum += self.a_prim[7-j]
+            cipher.append(partial_sum)
+        cipher = ",".join([hex(x)[2:] for x in cipher])
+        return cipher
+
 
 knap = Knapsack()
 print(knap.a_string)
 print(knap.a_prim_string)
 print(knap.m_string)
 print(knap.w_string)
+print(knap.encrypt("ąę", True))
