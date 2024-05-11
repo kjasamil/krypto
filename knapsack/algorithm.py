@@ -16,6 +16,42 @@ def set_bit(byte, bit, index):
     return result
 
 
+def verify_keys(a, a_prim, m_val, w_val, everything=False):
+    elements_sum = 0
+    if len(a) != 8:
+        raise ValueError("Liczba elementów ciągu 'a' w kluczu prywatnym nie wynosi 8.")
+    for i in range(8):
+        if a[i] < elements_sum:
+            raise ValueError("Ciąg 'a' w kluczu prywatnym nie jest superrosnący.")
+    if elements_sum > m_val:
+        raise ValueError("Wartość 'm' w kluczu prywatnym nie jest większa od sumy elementów w ciągu a.")
+    if m.gcd(m_val, w_val) != 1:
+        raise ValueError("Wartości 'm' i 'w' w kluczu prywatnym nie są względnie pierwsze.")
+    if everything:
+        if len(a_prim) != 8:
+            raise ValueError("Liczba elementów ciągu 'a_prim' w kluczu publicznym nie wynosi 8.")
+        for i in range(8):
+            if a_prim[i] != (a[i] * w_val) % m_val:
+                raise ValueError("Klucz publiczny nie odpowiada wartościom z klucza prywatnego.")
+
+
+def generate_public_key(a_string, m_string, w_string):
+    split_a = a_string.split(',')
+    a = [int(element, 16) for element in split_a]
+    m_val = int(m_string, 16)
+    w_val = int(w_string, 16)
+    try:
+        verify_keys(a, None, m_val, w_val)
+        public_key = []
+        for i in range(8):
+            element = (a[i] * w_val) % m_val
+            public_key.append(element)
+        public_key_string = ",".join([hex(x)[2:] for x in public_key])
+        return public_key_string
+    except ValueError as e:
+        print("Nie można wygenerować klucza publicznego:", e)
+
+
 class Knapsack:
     def __init__(self):
         self.a = []
@@ -27,7 +63,6 @@ class Knapsack:
         self.inv_w = 0
         self.m_string = ""
         self.w_string = ""
-        self.generate_keys()
 
     def generate_keys(self):
         self.m = ran.randint(2**63, 2**64-1)
@@ -46,6 +81,8 @@ class Knapsack:
                 raise Exception("Error")
         self.inv_w = int(sp.mod_inverse(self.w, self.m))
         elements_sum = 0
+        self.a.clear()
+        self.a_prim.clear()
         for i in range(8):
             element = ran.randint(2**((i*2)+10), 2**((i*2)+11)-1)
             while element < elements_sum:
@@ -57,6 +94,27 @@ class Knapsack:
         self.a_prim_string = ",".join([hex(x)[2:] for x in self.a_prim])
         self.m_string = hex(self.m)[2:]
         self.w_string = hex(self.w)[2:]
+
+    def set_keys(self, a_string, a_prim_string, m_string, w_string):
+        split_a = a_string.split(',')
+        a = [int(element, 16) for element in split_a]
+        split_a_prim = a_prim_string.split(',')
+        a_prim = [int(element, 16) for element in split_a_prim]
+        m_val = int(m_string, 16)
+        w_val = int(w_string, 16)
+        try:
+            verify_keys(a, a_prim, m_val, w_val, True)
+            self.a = a.copy()
+            self.a_string = ",".join([hex(x)[2:] for x in self.a])
+            self.a_prim = a_prim.copy()
+            self.a_prim_string = ",".join([hex(x)[2:] for x in self.a_prim])
+            self.m = m_val
+            self.m_string = hex(self.m)[2:]
+            self.w = w_val
+            self.w_string = hex(self.w)[2:]
+            self.inv_w = int(sp.mod_inverse(self.w, self.m))
+        except ValueError as e:
+            print("Nie można szyfrować przy użyciu wybranych kluczy:", e)
 
     def encrypt(self, plain_text, is_text):
         if is_text:
@@ -114,17 +172,14 @@ class Knapsack:
 # print("Kryptogram", encrypted)
 # print("Odszyfrowane:", knap.decrypt(encrypted, True))
 #
-# # PICTURE ENCRYPTION
-#
-# with open("obraz.png", "rb") as file:
-#     data = file.read()
-#
-# encrypted_picture = knap.encrypt(data, False)
-#
-# with open("obraz_zaszyfrowany.png", "wb") as file:
-#     file.write(encrypted_picture)
-#
-# decrypted_picture = knap.decrypt(encrypted_picture, False)
-#
-# with open("obraz_odszyfrowany.png", "wb") as file:
-#     file.write(decrypted_picture)
+# new_a = "1,3,7,d,1a,41,77,10b"
+# new_m = "20b"
+# new_w = "1d3"
+# new_a_prim = generate_public_key(new_a, new_m, new_w)
+# print(new_a_prim)
+# knap.set_keys(new_a, new_a_prim, new_m, new_w)
+# print("klucz prywatny", knap.a_string)
+# print("Klucz jawny", knap.a_prim_string)
+# print("Wartość m", knap.m_string)
+# print("Wartość w", knap.w_string)
+# print("Odwrócone w", knap.inv_w)
