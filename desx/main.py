@@ -6,7 +6,7 @@ import numpy as np
 
 class App:
     def __init__(self, root):
-        root.title("DESX")
+        root.title("kanpsack")
         width = 763
         height = 625
         screenwidth = root.winfo_screenwidth()
