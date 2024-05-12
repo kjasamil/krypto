@@ -4,17 +4,26 @@ import random as ran
 import struct
 
 
-def get_bit(byte, index):
-    return (byte >> (8 - (index + 1)) & 1) == 1
+def get_bit(byte, index):  # pobranie bitu z odpowiedniej pozycji w bajcie
+    return (byte >> (8 - (index + 1)) & 1) == 1  # True - bit jest 1, False - bit jest 0
 
 
-def set_bit(byte, bit, index):
-    if bit:
+def set_bit(byte, bit, index):  # ustawianie bitu na określonej pozycji w bajcie
+    if bit:                     # bit = True jeżeli ustawiamy 1, bit = False jeżeli ustawiamy 0
         result = byte | (128 >> index)
     else:
         result = byte & ~(128 >> index)
     return result
 
+
+# METODA WERYFIKUJĄCA POPRAWNOŚĆ KLUCZY.
+# Ciąg a w kluczu prywatnym (wagi poszczególnych elementów wkładanych do "plecaka") musi być superrosnący, czyli każdy
+# kolejny element jest większy od sumy poprzednich elementów
+# ponadto szyfrujemy bajty, zatem ciąg a musi mieć 8 elementów
+# wartość M musi być liczbą większą od sumy elementów ciągu a
+# wartość W musi być liczbą mniejszą od liczby M i ponadto liczby M i W muszą być względnie pierwsze
+# ciąg a' będący kluczem prywatnym liczy się na podstawie wzoru (a*W) mod M
+# sprawdzane jest zatem czy podany klucz publiczny odpowiada wartościom z klucza prywatnego
 
 def verify_keys(a, a_prim, m_val, w_val, everything=False):
     elements_sum = 0
@@ -27,6 +36,8 @@ def verify_keys(a, a_prim, m_val, w_val, everything=False):
         raise ValueError("Wartość 'm' w kluczu prywatnym nie jest większa od sumy elementów w ciągu a.")
     if m.gcd(m_val, w_val) != 1:
         raise ValueError("Wartości 'm' i 'w' w kluczu prywatnym nie są względnie pierwsze.")
+    if m_val < w_val:
+        raise ValueError("Wartość 'm' nie jest większa od wartości 'w' w kluczu prywatnym.")
     if everything:
         if len(a_prim) != 8:
             raise ValueError("Liczba elementów ciągu 'a_prim' w kluczu publicznym nie wynosi 8.")
@@ -34,6 +45,10 @@ def verify_keys(a, a_prim, m_val, w_val, everything=False):
             if a_prim[i] != (a[i] * w_val) % m_val:
                 raise ValueError("Klucz publiczny nie odpowiada wartościom z klucza prywatnego.")
 
+
+# GENEROWANIE KLUCZA PUBLICZNEGO
+# Dodatkowa funkcjonalność zwracająca string klucza publicznego w postaci szesnastkowej
+# na podstawie podanego klucza prywatnego.
 
 def generate_public_key(a_string, m_string, w_string):
     split_a = a_string.split(',')
@@ -54,15 +69,23 @@ def generate_public_key(a_string, m_string, w_string):
 
 class Knapsack:
     def __init__(self):
-        self.a = []
-        self.a_prim = []
+        self.a = []  # ciąg a (wagi poszczególnych elementów wkładanych do "plecaka"), klucz prywatny
+        self.a_prim = []  # ciąg a' (klucz publiczny, a' = (a*W) mod M)
         self.a_string = ""
         self.a_prim_string = ""
-        self.m = 0
-        self.w = 0
-        self.inv_w = 0
+        self.m = 0  # wartość M w kluczu prywatnym
+        self.w = 0  # wartość W w kluczu prywatnym
+        self.inv_w = 0  # wartość odpowiadająca W^-1 mod M
         self.m_string = ""
         self.w_string = ""
+
+    # METODA GENERUJĄCA KLUCZE.
+    # Wybierane są w sposób losowy liczby M i W, 2**63 < M <= 2**64-1 oraz 2**15 < W <= 2**16-1
+    # czyli liczba M jest wielkości 8 bajtów, liczba W wielkości 2 bajtów
+    # upewniamy się czy są względnie pierwsze, jeżeli nie to wybieramy kolejną wartość W
+    # obliczamy W^-1 mod M
+    # następnie jednocześnie tworzymy ciągi a i a' (jeden superrosnący, drugi nie superrosnący)
+    # otrzymujemy klucz publiczny a' oraz klucz prywatny {M, W, a}
 
     def generate_keys(self):
         self.m = ran.randint(2**63, 2**64-1)
@@ -95,6 +118,9 @@ class Knapsack:
         self.m_string = hex(self.m)[2:]
         self.w_string = hex(self.w)[2:]
 
+    # METODA USTAWIAJĄCA KLUCZE.
+    # Wywoływana przy szyfrowaniu/deszyfrowaniu.
+
     def set_keys(self, a_string, a_prim_string, m_string, w_string):
         split_a = a_string.split(',')
         a = [int(element, 16) for element in split_a]
@@ -115,6 +141,13 @@ class Knapsack:
             self.inv_w = int(sp.mod_inverse(self.w, self.m))
         except ValueError as e:
             print("Nie można szyfrować przy użyciu wybranych kluczy:", e)
+
+    # SZYFROWANIE.
+    # Do szyfrowania wiadomości, którą wysyłamy do odbiorcy, używamy klucza publicznego odbiorcy (a').
+    # n-ty bit ustawiony jako 1 w bajcie tekstu jawnego informuje, że do plecaka zostanie włożony element n-ty z a'
+    # na podstawie bajtu obliczana jest suma wag tych włożonych elementów, otrzymując kryptogram
+    # pakujemy każdą liczbę z tablicy zawierającej kryptogramy odpowiednich bajtów na 8 bajtach (q) jeżeli szyfrowaliśmy
+    # plik, natomiast konwertujemy tą tablicę do stringa w postaci szesnastkowej, jeżeli szyfrowaliśmy tekst w oknie
 
     def encrypt(self, plain_text, is_text):
         if is_text:
@@ -137,6 +170,19 @@ class Knapsack:
             return hex_cipher
         return cipher_bytes
 
+    # DESZYFROWANIE.
+    # Jeżeli nadawca zaszyfrował wiadomość korzystając z klucza publicznego odbiorcy, to odbiorca, chcąc ją odszyfrować
+    # korzysta ze swojego klucza prywatnego.
+    # jeżeli deszyfrujemy tekst w oknie to konwertujemy string w postaci szesnastkowej do tablicy zawierającej
+    # kryptogramy, jeżeli deszyfrujemy plik to rozpakowywujemy 8 bajtów z tablicy bajtów, konwertujemy do inta i
+    # tworzymy z tych intów tablicę
+    # każdy kryptogram mnożymy przez odwrotność mod M liczby W w modulo M, uzyskując sumę wag przedmiotów włożonych
+    # do plecaka przy użyciu wag z ciągu a (klucz prywatny)
+    # porównujemy te sumy z elementami ciągu a, iterując od końca
+    # jeżeli suma jest większa od wagi sprawdzanego elementu z ciągu a, to oznacza to że ten element został włożony
+    # do plecaka i na bicie o pozycji odpowiadającej pozycji elementu z ciągu a ustawiamy 1
+    # jeżeli ustawiliśmy 1 to pomniejszamy sumę o wagę sprawdzonego przedmiotu
+
     def decrypt(self, cipher_text, is_text):
         plain_text = bytearray()
         if is_text:
@@ -158,28 +204,3 @@ class Knapsack:
         if is_text:
             plain_text = plain_text.decode("iso-8859-2")
         return plain_text
-
-# TESTING PURPOSES
-# TEXT ENCRYPTION
-
-
-# knap = Knapsack()
-# print("klucz prywatny", knap.a_string)
-# print("Klucz jawny", knap.a_prim_string)
-# print("Wartość m", knap.m_string)
-# print("Wartość w", knap.w_string)
-# encrypted = knap.encrypt("Gżegżółka", True)
-# print("Kryptogram", encrypted)
-# print("Odszyfrowane:", knap.decrypt(encrypted, True))
-#
-# new_a = "1,3,7,d,1a,41,77,10b"
-# new_m = "20b"
-# new_w = "1d3"
-# new_a_prim = generate_public_key(new_a, new_m, new_w)
-# print(new_a_prim)
-# knap.set_keys(new_a, new_a_prim, new_m, new_w)
-# print("klucz prywatny", knap.a_string)
-# print("Klucz jawny", knap.a_prim_string)
-# print("Wartość m", knap.m_string)
-# print("Wartość w", knap.w_string)
-# print("Odwrócone w", knap.inv_w)
